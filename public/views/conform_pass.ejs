@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Password Confirmation</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="/css/confrom_pass.css">
+</head>
+<body>
+	<div class="container">
+		<!-- <form action="/compate" method="post"> -->
+		<div class="form">
+			<label for="password">Password:</label>
+			<input type="password" id="password" name="password"  pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" onblur="isSame()"><br>
+			<label for="confirm-password">Confirm Password:</label>
+			<input type="password" id="confirm-password" name="confirm-password"  pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"  oninput="isSame() " ><br>
+			<span id="msg" onclick=" update();">Password is Not Match</span><br>
+			<span id="msg1">Password is changed</span><br>
+			<a href="/" id="back_to_login">Back to Login</a>
+			<input type="submit" value="Update" id="update" onclick="comformation();">
+		</div>
+		<!-- </form> -->
+	</div>
+</body>
+<script>
+	function isSame(){
+		let str1=document.getElementById('password').value;
+		let str2=document.getElementById('confirm-password').value;
+
+		if(str1 != str2){
+			document.getElementById('msg').style.display='block';
+			document.getElementById('update').style.display='none';
+			
+		}else{
+			document.getElementById('msg').style.display='none';
+			document.getElementById('update').style.display='block';
+		}
+	}
+	async function comformation(){
+		let pass1=document.getElementById('password').value;
+		await fetch('http://localhost:8000/updated', {
+			method: 'post',
+			headers: {
+				"Content-type": 'application/json'
+			},
+			body: JSON.stringify({
+				pass1
+			})	
+		})
+		let str1=document.getElementById('password').value;
+		let str2=document.getElementById('confirm-password').value;
+		if(str1==str2 && str1 != '' && str2 !=''){
+			document.getElementById('msg1').style.display='block';
+			document.getElementById('back_to_login').style.display='block'
+			document.getElementById('update').style.display='none'
+			document.getElementById('confirm-password').style.disabled = true;
+			document.getElementById('password').style.disabled = true;
+		}
+		
+	}
+</script>
+</html>

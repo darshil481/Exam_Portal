@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Forgot Password</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="/css/forgot.css">
+</head>
+<body>
+	<div class="container">
+		<form action="/link_generate" method="post">
+			<h1>Forgot Password</h1>
+			<p>Please enter your email address to reset your password:</p>
+			<label for="email">Email:</label>
+			<input type="email" id="email" name="email"  onkeyup="compare()"  onfocus="compare()" onblur="compare();"><br>
+			<span id="not_regi">admin are not registred</span>
+			<input type="submit" value="Reset Password" id="button" ></a>
+		</form>
+	</div>
+	<script>
+		document.getElementById('button').style.display='none';
+		async function compare() {
+		event.preventDefault();
+		let email = document.getElementById('email').value;
+			await fetch('http://localhost:8000/xyz', {
+				method: 'post',
+				headers: {
+					"Content-type": 'application/json'
+				},
+				body: JSON.stringify({
+					email
+				})
+			})
+		.then(res => res.json())
+		.then(data => {
+			console.log(data);
+			var pass=document.getElementById('email').value;
+			if (data.ans1[1] == pass && data.ans1[0] == true) {
+				document.getElementById('not_regi').style.display='none';
+				document.getElementById('button').style.display='block';
+				return true;
+			}
+			if (( data.ans1[0] == false ) ) {	
+				document.getElementById('not_regi').style.display='block';
+				document.getElementById('button').style.display='none';
+				return false;
+			}	
+		})
+	}
+	</script>
+</body>
+</html>

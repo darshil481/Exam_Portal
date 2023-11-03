@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Admin Login</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" type="text/css" href="/css/admin.css">
+</head>
+
+<body>
+	<div class="container">
+		<form action="/login" method="post" id="frm">
+			<h1>Admin Login</h1>
+			<label for="username" id="uname">Username:</label>
+			<input type="text" id="username" name="username"><br>
+			<label for="password" id="pass">Password:</label>
+			<input type="password" id="password" name="password"><br>
+			<span id="notvalid">Admin or Password is not valid</span>
+			<a href="forgot_pass" id="forgot">Forget Password</a><br><br>
+			<input type="submit" value="Login" id="btnn" onclick="return compare() ;">
+		</form>
+	</div>
+</body>
+<script>
+	let userdata;
+	async function compare() {
+		event.preventDefault();
+		let email = document.getElementById('username').value;
+		let error = document.getElementById('error');
+		var password=document.getElementById('password').value;
+		await fetch('http://localhost:8000/abc', {
+			method: 'post',
+			headers: {
+				"Content-type": 'application/json'
+			},
+			body: JSON.stringify({
+				email,
+				password
+			})
+		})
+		.then(res => res.json())
+		.then(data => {
+			var pass=document.getElementById('password').value;
+			if(data == false){
+				document.getElementById('notvalid').style.display = 'block';
+			}
+			else{
+				location.assign("/login")
+			}
+		})
+	}
+</script>
+
+</html>
